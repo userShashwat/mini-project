@@ -1,0 +1,27 @@
+# Alert thresholds configuration
+face_detection:
+  max_faces: 1
+  look_away_seconds: 30
+  face_not_visible_seconds: 10
+  multiple_faces_alert: true
+  
+object_detection:
+  confidence_threshold: 0.5
+  suspicious_objects:
+    - cell phone
+    - laptop
+    - book
+    - tablet
+    - second screen
+    - headphone
+    
+audio_detection:
+  voice_activity_threshold: 0.1
+  multiple_voices_seconds: 5
+  background_noise_threshold: 0.3
+  silence_seconds: 30
+
+scoring:
+  suspicious_threshold: 0.7
+  alert_cooldown_seconds: 10
+  max_alerts_per_minute: 10

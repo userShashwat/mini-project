@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proctoring AI - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #e94560;
+            text-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: #aaa;
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: rgba(15, 52, 96, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+        }
+        
+        .card h2 {
+            color: #e94560;
+            margin-bottom: 1rem;
+        }
+        
+        .card p {
+            color: #ccc;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: #e94560;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background: #ff6b81;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #e94560;
+        }
+        
+        .btn-outline:hover {
+            background: #e94560;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+        
+        .feature {
+            padding: 1rem;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #e94560;
+        }
+        
+        .footer {
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Proctoring AI</h1>
+        <p class="subtitle">Advanced AI-Powered Exam Monitoring System</p>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">👤</div>
+                <h3>Face Detection</h3>
+                <p>Real-time face tracking and multiple face detection</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <h3>Object Detection</h3>
+                <p>Detect phones, books, and suspicious items</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎤</div>
+                <h3>Audio Analysis</h3>
+                <p>Voice activity and multiple speaker detection</p>
+            </div>
+        </div>
+        
+        <div class="cards">
+            <div class="card">
+                <h2>📝 Take Exam</h2>
+                <p>Start your proctored exam session with real-time monitoring</p>
+                <a href="/exam" class="btn">Enter Exam</a>
+            </div>
+            
+            <div class="card">
+                <h2>👁️ Proctor Dashboard</h2>
+                <p>Monitor active exam sessions and receive real-time alerts</p>
+                <a href="/proctor" class="btn btn-outline">Monitor Exams</a>
+            </div>
+            
+            <div class="card">
+                <h2>⚙️ Admin Panel</h2>
+                <p>Manage students, exams, and view reports</p>
+                <a href="/admin" class="btn btn-outline">Admin Access</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            © 2026 Proctoring AI - Advanced Edition v2.0
+        </div>
+    </div>
+</body>
+</html>

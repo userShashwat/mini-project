@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proctoring AI - Exam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        
+        .navbar {
+            background: #16213e;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #e94560;
+        }
+        
+        .navbar h1 {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+        
+        .navbar h1 span {
+            color: #e94560;
+        }
+        
+        .timer {
+            background: #0f3460;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e94560;
+        }
+        
+        .container {
+            display: flex;
+            padding: 1rem;
+            gap: 1rem;
+            height: calc(100vh - 80px);
+        }
+        
+        .main-content {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .video-container {
+            background: #0f3460;
+            border-radius: 10px;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .video-feed {
+            background: #1a1a2e;
+            height: 400px;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .video-feed img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .status-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .warning-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(233, 69, 96, 0.9);
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            animation: pulse 1s infinite;
+            display: none;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .exam-info {
+            background: #0f3460;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        .exam-title {
+            font-size: 1.2rem;
+            color: #e94560;
+        }
+        
+        .question-area {
+            min-height: 200px;
+            background: #1a1a2e;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .option {
+            background: #16213e;
+            padding: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .option:hover {
+            background: #e94560;
+        }
+        
+        .sidebar {
+            flex: 1;
+            background: #0f3460;
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .status-card {
+            background: #16213e;
+            border-radius: 5px;
+            padding: 1rem;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .status-label {
+            color: #aaa;
+        }
+        
+        .status-value {
+            font-weight: bold;
+        }
+        
+        .status-value.good {
+            color: #4CAF50;
+        }
+        
+        .status-value.warning {
+            color: #ff9800;
+        }
+        
+        .status-value.bad {
+            color: #e94560;
+        }
+        
+        .alerts-panel {
+            background: #16213e;
+            border-radius: 5px;
+            padding: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .alerts-panel h3 {
+            color: #e94560;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-item {
+            padding: 0.5rem;
+            margin: 0.3rem 0;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            animation: slideIn 0.3s;
+        }
+        
+        .alert-item.critical {
+            background: #e94560;
+        }
+        
+        .alert-item.warning {
+            background: #ff9800;
+        }
+        
+        .alert-item.info {
+            background: #2196F3;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+        
+        button:hover {
+            opacity: 0.8;
+        }
+        
+        .btn-submit {
+            background: #4CAF50;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-danger {
+            background: #e94560;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Proctoring <span>AI</span> - Exam</h1>
+        <div class="timer" id="timer">00:00:00</div>
+    </div>
+    
+    <div class="container">
+        <div class="main-content">
+            <div class="video-container">
+                <div class="video-feed" id="videoFeed">
+                    <img src="/video_feed/default" alt="Video feed" id="video">
+                </div>
+                <div class="status-overlay" id="statusOverlay">
+                    Status: <span id="statusText">Active</span>
+                </div>
+                <div class="warning-overlay" id="warningOverlay">
+                    ⚠️ Warning from proctor
+                </div>
+            </div>
+            
+            <div class="exam-info">
+                <div class="exam-header">
+                    <span class="exam-title" id="examName">Mathematics Final Exam</span>
+                    <span>Question <span id="currentQ">1</span>/<span id="totalQ">10</span></span>
+                </div>
+                
+                <div class="question-area" id="question">
+                    What is the value of π (pi) approximately?
+                </div>
+                
+                <div class="options">
+                    <div class="option" onclick="selectOption(0)">3.14</div>
+                    <div class="option" onclick="selectOption(1)">2.71</div>
+                    <div class="option" onclick="selectOption(2)">1.61</div>
+                    <div class="option" onclick="selectOption(3)">4.20</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn-submit" onclick="submitAnswer()">Submit Answer</button>
+                    <button class="btn-danger" onclick="endExam()">End Exam</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="status-card">
+                <h3>📊 Monitoring Status</h3>
+                <div class="status-item">
+                    <span class="status-label">Face Detection:</span>
+                    <span class="status-value good" id="faceStatus">✓ Detected</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Objects:</span>
+                    <span class="status-value good" id="objectStatus">✓ Clean</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Audio:</span>
+                    <span class="status-value good" id="audioStatus">✓ Silent</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Suspicious Score:</span>
+                    <span class="status-value" id="scoreValue">0.00</span>
+                </div>
+            </div>
+            
+            <div class="alerts-panel">
+                <h3>🔴 Live Alerts</h3>
+                <div id="alertsList">
+                    <div class="alert-item info">System initialized</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session') || 'default';
+        const studentName = urlParams.get('student') || 'Student';
+        const examName = urlParams.get('exam') || 'General Exam';
+        
+        document.getElementById('examName').textContent = examName;
+        
+        // Connect to WebSocket
+        const socket = io();
+        
+        // Join session
+        socket.emit('join_session', {
+            session_id: sessionId
+        });
+        
+        // Update video feed
+        document.getElementById('video').src = `/video_feed/${sessionId}`;
+        
+        // Timer
+        let seconds = 0;
+        setInterval(() => {
+            seconds++;
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            document.getElementById('timer').textContent = 
+                `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
+        
+        // Fetch stats periodically
+        setInterval(fetchStats, 2000);
+        setInterval(fetchAlerts, 3000);
+        
+        async function fetchStats() {
+            try {
+                const response = await fetch(`/api/session/${sessionId}/stats`);
+                const stats = await response.json();
+                
+                // Update UI with stats
+                document.getElementById('scoreValue').textContent = stats.suspicious_score.toFixed(2);
+                
+                // Update face status
+                const faceEl = document.getElementById('faceStatus');
+                if (stats.face_count > 0) {
+                    faceEl.textContent = `✓ ${stats.face_count} face(s)`;
+                    faceEl.className = 'status-value good';
+                } else {
+                    faceEl.textContent = '✗ No face';
+                    faceEl.className = 'status-value bad';
+                }
+                
+                // Update object status
+                const objEl = document.getElementById('objectStatus');
+                if (stats.suspicious_objects) {
+                    objEl.textContent = '⚠️ Suspicious';
+                    objEl.className = 'status-value bad';
+                } else {
+                    objEl.textContent = '✓ Clean';
+                    objEl.className = 'status-value good';
+                }
+                
+                // Update audio status
+                const audioEl = document.getElementById('audioStatus');
+                if (stats.audio_active) {
+                    audioEl.textContent = '🎤 Voice detected';
+                    audioEl.className = 'status-value warning';
+                } else {
+                    audioEl.textContent = '✓ Silent';
+                    audioEl.className = 'status-value good';
+                }
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+            }
+        }
+        
+        async function fetchAlerts() {
+            try {
+                const response = await fetch(`/api/session/${sessionId}/alerts`);
+                const alerts = await response.json();
+                
+                const alertsList = document.getElementById('alertsList');
+                alertsList.innerHTML = '';
+                
+                alerts.slice(-5).reverse().forEach(alert => {
+                    const div = document.createElement('div');
+                    div.className = `alert-item ${alert.severity === 3 ? 'critical' : alert.severity === 2 ? 'warning' : 'info'}`;
+                    div.textContent = alert.message;
+                    alertsList.appendChild(div);
+                });
+            } catch (error) {
+                console.error('Error fetching alerts:', error);
+            }
+        }
+        
+        function selectOption(index) {
+            // Highlight selected option
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                opt.style.background = i === index ? '#e94560' : '#16213e';
+            });
+        }
+        
+        function submitAnswer() {
+            alert('Answer submitted!');
+        }
+        
+        function endExam() {
+            if (confirm('Are you sure you want to end the exam?')) {
+                fetch(`/api/stop_session/${sessionId}`, {
+                    method: 'POST'
+                }).then(() => {
+                    window.location.href = '/';
+                });
+            }
+        }
+        
+        // WebSocket events
+        socket.on('proctor_warning', (data) => {
+            const warningDiv = document.getElementById('warningOverlay');
+            warningDiv.style.display = 'block';
+            warningDiv.textContent = `⚠️ ${data.message}`;
+            setTimeout(() => {
+                warningDiv.style.display = 'none';
+            }, 5000);
+        });
+        
+        socket.on('exam_terminated', (data) => {
+            alert(`Exam terminated: ${data.reason}`);
+            window.location.href = '/';
+        });
+    </script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</body>
+</html>

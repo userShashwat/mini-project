@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Proctoring AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-container {
+            background: #0f3460;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #e94560;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            background: #16213e;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+        
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #ff6b81;
+        }
+        
+        .alert {
+            padding: 0.8rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-danger {
+            background: #e94560;
+            color: white;
+        }
+        
+        .alert-success {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .links a {
+            color: #aaa;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+        
+        .links a:hover {
+            color: #e94560;
+        }
+        
+        .security-badge {
+            text-align: center;
+            margin-top: 2rem;
+            color: #4e8d7c;
+            font-size: 0.9rem;
+        }
+        
+        .security-badge i {
+            margin-right: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🔐 Proctoring AI</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+      <form method="POST" action="{{ url_for('auth.login') }}">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                <label>Username</label>
+                {{ form.username(class="form-control") }}
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                {{ form.password(class="form-control") }}
+            </div>
+            
+            <button type="submit">Login</button>
+        </form>
+        
+        <div class="links">
+            <a href="{{ url_for('auth.register') }}">Register</a>
+            <a href="#">Forgot Password?</a>
+        </div>
+        
+        <div class="security-badge">
+            <i>🛡️</i> Secure Login • HTTPS • Rate Limited
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+opencv-python>=4.9.0.80
+opencv-contrib-python>=4.9.0.80
+numpy>=1.26.0
+PyYAML>=6.0.1
+sounddevice>=0.4.7
+soundfile>=0.12.1
+scipy>=1.13.0
+librosa>=0.10.1
+sqlalchemy>=2.0.29
+Pillow>=10.3.0
+flask>=3.0.3
+pytest>=8.1.2
+torch>=2.3.0
+torchvision>=0.18.0
+ultralytics>=8.2.0
+scikit-learn>=1.4.2
+# Security
+flask-login==0.6.2
+flask-bcrypt==1.0.1
+flask-wtf==1.1.1
+wtforms==3.0.1
+pyjwt==2.8.0
+itsdangerous==2.1.2
+email-validator==2.0.0
